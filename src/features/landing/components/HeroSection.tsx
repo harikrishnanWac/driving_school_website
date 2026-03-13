@@ -1,22 +1,31 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import Button from '@/components/ui/Button';
 import { ChevronRight, PlayCircle } from 'lucide-react';
 import * as motion from 'framer-motion/client';
+import dynamic from 'next/dynamic';
+
+const DrivingScene = dynamic(() => import('./DrivingScene'), { ssr: false });
 
 const HeroSection = () => {
   return (
-    <section id="home" className="relative h-screen min-h-[600px] flex items-center justify-center pt-20 overflow-hidden">
-      {/* Background with overlay */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=2070')" }}
-      >
-        <div className="absolute inset-0 bg-gray-900/70"></div>
+    <section
+      id="home"
+      className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-gray-900"
+    >
+      {/* 3D scene in a rounded box */}
+      <div className="absolute inset-4 md:inset-8 z-0 rounded-3xl overflow-hidden">
+        <Suspense fallback={<div className="absolute inset-0 bg-gray-900" />}>
+          <DrivingScene />
+        </Suspense>
       </div>
 
-      <div className="container mx-auto px-4 md:px-6 relative z-10 w-full">
+      {/* Gradient overlay */}
+      <div className="absolute inset-4 md:inset-8 z-[1] rounded-3xl bg-gradient-to-r from-gray-900/80 via-gray-900/50 to-transparent pointer-events-none" />
+
+      {/* Hero text */}
+      <div className="container mx-auto px-4 md:px-6 relative z-[2] w-full">
         <div className="max-w-3xl text-center md:text-left pt-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -27,17 +36,17 @@ const HeroSection = () => {
               #1 Driving School in Town
             </span>
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-4xl md:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6"
           >
-            Drive <span className="text-secondary">Safe</span>,<br/> Drive Smart.
+            Drive <span className="text-secondary">Safe</span>,<br /> Drive Smart.
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
@@ -45,8 +54,8 @@ const HeroSection = () => {
           >
             Learn to drive with confidence. Our certified instructors provide modern training in safe, dual-control vehicles to ensure you pass your driving test on the first try.
           </motion.p>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}

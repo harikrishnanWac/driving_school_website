@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
@@ -90,14 +92,20 @@ const PricingSection = () => {
                     ))}
                   </ul>
                   
-                  <Button 
-                    variant={plan.popular ? 'primary' : 'outline'} 
-                    size="lg" 
-                    fullWidth 
-                    className={plan.popular ? 'shadow-lg shadow-primary/25' : 'bg-white'}
-                  >
-                    Enroll in {plan.name}
-                  </Button>
+                  <a href="#contact" onClick={(e) => {
+                    e.preventDefault();
+                    window.dispatchEvent(new CustomEvent('select-plan', { detail: plan.name }));
+                    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                  }}>
+                    <Button
+                      variant={plan.popular ? 'primary' : 'outline'}
+                      size="lg"
+                      fullWidth
+                      className={plan.popular ? 'shadow-lg shadow-primary/25' : 'bg-white'}
+                    >
+                      Enroll in {plan.name}
+                    </Button>
+                  </a>
                 </div>
               </Card>
             </div>

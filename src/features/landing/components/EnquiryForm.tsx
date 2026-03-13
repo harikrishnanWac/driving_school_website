@@ -1,15 +1,26 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Input from '@/components/ui/Input';
 import Button from '@/components/ui/Button';
 import { Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 const EnquiryForm = () => {
   const formRef = useRef<HTMLFormElement>(null);
-  
+  const selectRef = useRef<HTMLSelectElement>(null);
+
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [selectedPlan, setSelectedPlan] = useState('');
+
+  useEffect(() => {
+    const handleSelectPlan = (e: Event) => {
+      const plan = (e as CustomEvent).detail;
+      setSelectedPlan(plan);
+    };
+    window.addEventListener('select-plan', handleSelectPlan);
+    return () => window.removeEventListener('select-plan', handleSelectPlan);
+  }, []);
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,6 +56,7 @@ const EnquiryForm = () => {
       
       setStatus('success');
       formRef.current.reset();
+      setSelectedPlan('');
       
       // Auto reset success message after 5 seconds
       setTimeout(() => setStatus('idle'), 5000);
@@ -117,8 +129,11 @@ const EnquiryForm = () => {
           
           <div className="w-full flex flex-col gap-1.5">
             <label className="text-sm font-semibold text-gray-700 ml-1">Preferred Course</label>
-            <select 
+            <select
+              ref={selectRef}
               name="plan"
+              value={selectedPlan}
+              onChange={(e) => setSelectedPlan(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border bg-gray-50/50 border-gray-200 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none transition-all duration-200 appearance-none disabled:opacity-50 text-black"
               disabled={status === 'loading'}
               required
