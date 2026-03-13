@@ -35,7 +35,7 @@ const AboutSection = () => {
           <div className="lg:w-1/2 relative w-full">
             <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
               <img 
-                src="https://images.unsplash.com/photo-1600320844678-460539823188?auto=format&fit=crop&q=80&w=1000" 
+                src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1000" 
                 alt="Student learning to drive" 
                 className="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-700"
               />

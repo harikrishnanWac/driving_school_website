@@ -4,10 +4,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const images = [
-  { src: "https://images.unsplash.com/photo-1600320844678-460539823188?auto=format&fit=crop&q=80&w=800", alt: "Student learning to drive with instructor", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-2" },
-  { src: "https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&q=80&w=800", alt: "Instructor mentoring a new driver", colSpan: "col-span-1", rowSpan: "row-span-1" },
-  { src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800", alt: "Hands-on driving practice", colSpan: "col-span-1", rowSpan: "row-span-1" },
-  { src: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&q=80&w=800", alt: "Our training vehicles", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-1" }
+  { src: "https://images.unsplash.com/photo-1606778465053-5290a2fc7225?auto=format&fit=crop&q=80&w=800", alt: "Students learning driving", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-2" },
+  { src: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=800", alt: "Training vehicles", colSpan: "col-span-1", rowSpan: "row-span-1" },
+  { src: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=800", alt: "Driving practice", colSpan: "col-span-1", rowSpan: "row-span-1" },
+  { src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=800", alt: "Modern cars", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-1" }
 ];
 
 const GallerySection = () => {
