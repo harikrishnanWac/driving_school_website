@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { GalleryBackground } from './SectionBackgrounds';
 
 const images = [
   { src: "https://images.unsplash.com/photo-1606778465053-5290a2fc7225?auto=format&fit=crop&q=80&w=800", alt: "Students learning driving", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-2" },
@@ -12,8 +13,9 @@ const images = [
 
 const GallerySection = () => {
   return (
-    <section id="gallery" className="py-24 bg-white">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="gallery" className="py-24 bg-white relative overflow-hidden">
+      <GalleryBackground />
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="mb-2 text-primary font-bold tracking-wider uppercase text-sm">Action Gallery</div>
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">

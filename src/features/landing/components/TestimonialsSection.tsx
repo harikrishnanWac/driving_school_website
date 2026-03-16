@@ -4,6 +4,7 @@ import React from 'react';
 import Card from '@/components/ui/Card';
 import { Star, Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { TestimonialsBackground } from './SectionBackgrounds';
 
 const testimonials = [
   {
@@ -34,6 +35,7 @@ const TestimonialsSection = () => {
     <section id="testimonials" className="py-24 bg-gray-50 overflow-hidden relative">
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-blue-100/50 blur-3xl opacity-50 z-0"></div>
       <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-yellow-100/50 blur-3xl opacity-50 z-0"></div>
+      <TestimonialsBackground />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">

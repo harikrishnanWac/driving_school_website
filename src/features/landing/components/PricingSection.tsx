@@ -4,6 +4,7 @@ import React from 'react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { Check } from 'lucide-react';
+import { PricingBackground } from './SectionBackgrounds';
 
 const plans = [
   {
@@ -49,8 +50,9 @@ const plans = [
 
 const PricingSection = () => {
   return (
-    <section id="packages" className="py-24 bg-gray-50">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="packages" className="py-24 bg-gray-50 relative overflow-hidden">
+      <PricingBackground />
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="mb-2 text-primary font-bold tracking-wider uppercase text-sm">Driving Packages</div>
           <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">

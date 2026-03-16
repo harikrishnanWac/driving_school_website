@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Users, Calendar, Award, TrendingUp } from 'lucide-react';
 import { motion, useInView } from 'framer-motion';
+import { StatisticsBackground } from './SectionBackgrounds';
 
 const stats = [
   { icon: <Users size={32} />, value: 2500, suffix: "+", label: "Students Trained" },
@@ -54,6 +55,7 @@ const StatisticsSection = () => {
         <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-white blur-3xl"></div>
         <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-white blur-3xl"></div>
       </div>
+      <StatisticsBackground />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8">

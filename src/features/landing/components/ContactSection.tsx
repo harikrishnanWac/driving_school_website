@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import EnquiryForm from './EnquiryForm';
+import { ContactBackground } from './SectionBackgrounds';
 
 const contactInfo = [
   {
@@ -27,9 +30,10 @@ const contactInfo = [
 
 const ContactSection = () => {
   return (
-    <section id="contact" className="py-24 bg-white relative">
+    <section id="contact" className="py-24 bg-white relative overflow-hidden">
       {/* Background Decor */}
-      <div className="absolute top-0 left-0 w-1/3 h-full bg-blue-50/50 -z-10 hidden lg:block rounded-r-[100px]"></div>
+      <div className="absolute top-0 left-0 w-1/3 h-full bg-blue-50/50 z-0 hidden lg:block rounded-r-[100px]"></div>
+      <ContactBackground />
 
       <div className="container mx-auto px-4 md:px-6 z-10 relative">
         <div className="mb-16">

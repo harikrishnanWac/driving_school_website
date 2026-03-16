@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Award, Clock, ShieldCheck, Car } from 'lucide-react';
+import { AboutBackground } from './SectionBackgrounds';
 
 const features = [
   {
@@ -28,8 +29,9 @@ const features = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-24 bg-white overflow-hidden">
-      <div className="container mx-auto px-4 md:px-6">
+    <section id="about" className="py-24 bg-white overflow-hidden relative">
+      <AboutBackground />
+      <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
           
           <div className="lg:w-1/2 relative w-full">
