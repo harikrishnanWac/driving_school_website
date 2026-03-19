@@ -1,9 +1,10 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { GalleryBackground } from './SectionBackgrounds';
+import TextReveal from './TextReveal';
 
 const images = [
   { src: "https://images.unsplash.com/photo-1606778465053-5290a2fc7225?auto=format&fit=crop&q=80&w=800", alt: "Students learning driving", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-2" },
@@ -42,13 +43,10 @@ const Lightbox = ({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md"
       onClick={onClose}
     >
-      <button
-        onClick={onClose}
-        className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-10 p-2"
-      >
+      <button onClick={onClose} className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-10 p-2">
         <X size={28} />
       </button>
 
@@ -59,17 +57,19 @@ const Lightbox = ({
         <ChevronLeft size={28} />
       </button>
 
-      <motion.img
-        key={imageIndex}
-        src={images[imageIndex].src.replace('w=800', 'w=1400')}
-        alt={images[imageIndex].alt}
-        className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-2xl"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.3 }}
-        onClick={(e) => e.stopPropagation()}
-      />
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={imageIndex}
+          src={images[imageIndex].src.replace('w=800', 'w=1400')}
+          alt={images[imageIndex].alt}
+          className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-2xl"
+          initial={{ opacity: 0, scale: 0.85, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.85, y: -20 }}
+          transition={{ duration: 0.35 }}
+          onClick={(e) => e.stopPropagation()}
+        />
+      </AnimatePresence>
 
       <button
         onClick={(e) => { e.stopPropagation(); onNext(); }}
@@ -78,8 +78,15 @@ const Lightbox = ({
         <ChevronRight size={28} />
       </button>
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-sm font-medium">
-        {images[imageIndex].alt} — {imageIndex + 1} / {images.length}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3">
+        {images.map((_, i) => (
+          <div
+            key={i}
+            className={`h-1.5 rounded-full transition-all duration-300 ${
+              i === imageIndex ? 'w-8 bg-white' : 'w-1.5 bg-white/40'
+            }`}
+          />
+        ))}
       </div>
     </motion.div>
   );
@@ -87,6 +94,14 @@ const Lightbox = ({
 
 const GallerySection = () => {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const gridY = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   const handlePrev = useCallback(() => {
     setLightboxIndex(prev => prev !== null ? (prev - 1 + images.length) % images.length : null);
@@ -97,48 +112,68 @@ const GallerySection = () => {
   }, []);
 
   return (
-    <section id="gallery" className="py-24 bg-white relative overflow-hidden">
+    <section ref={sectionRef} id="gallery" className="py-24 md:py-32 bg-white relative overflow-hidden">
       <GalleryBackground />
       <div className="container mx-auto px-4 md:px-6 relative z-10">
-        <motion.div
-          className="text-center max-w-3xl mx-auto mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <div className="mb-2 text-primary font-bold tracking-wider uppercase text-sm">Action Gallery</div>
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.div
+            className="mb-2 text-primary font-bold tracking-wider uppercase text-sm"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+          >
+            Action Gallery
+          </motion.div>
+          <TextReveal className="text-3xl md:text-5xl font-bold text-gray-900 mb-6">
             Inside Our Training
-          </h2>
-          <p className="text-gray-600 text-lg">
+          </TextReveal>
+          <motion.p
+            className="text-gray-600 text-lg"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
             Take a look at our modern vehicles and facilities. Experience the professional environment where our students become confident drivers.
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px]"
+          style={{ y: gridY }}
+        >
           {images.map((image, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={{ opacity: 0, scale: 0.9, filter: "blur(8px)" }}
+              whileInView={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+              transition={{ duration: 0.6, delay: index * 0.12 }}
               viewport={{ once: true }}
               className={`relative overflow-hidden rounded-2xl group cursor-pointer ${image.colSpan} ${image.rowSpan}`}
               onClick={() => setLightboxIndex(index)}
-              whileHover={{ scale: 1.02 }}
+              whileHover={{ scale: 1.03, transition: { duration: 0.3 } }}
             >
-              <img
+              <motion.img
                 src={image.src}
                 alt={image.alt}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="w-full h-full object-cover"
+                whileHover={{ scale: 1.12 }}
+                transition={{ duration: 0.7 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                 <div className="p-6 w-full flex items-end justify-between">
-                  <h4 className="text-white font-semibold text-lg">{image.alt}</h4>
+                  <motion.h4
+                    className="text-white font-semibold text-lg"
+                    initial={{ y: 10 }}
+                    whileInView={{ y: 0 }}
+                  >
+                    {image.alt}
+                  </motion.h4>
                   <motion.div
-                    className="bg-white/20 backdrop-blur-sm p-2 rounded-full"
-                    whileHover={{ scale: 1.1 }}
+                    className="bg-white/20 backdrop-blur-sm p-2.5 rounded-full"
+                    whileHover={{ scale: 1.2, rotate: 90 }}
+                    transition={{ duration: 0.3 }}
                   >
                     <ZoomIn size={20} className="text-white" />
                   </motion.div>
@@ -146,7 +181,7 @@ const GallerySection = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
 
       <AnimatePresence>

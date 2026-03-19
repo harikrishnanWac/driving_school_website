@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import { Users, Calendar, Award, TrendingUp } from 'lucide-react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import { StatisticsBackground } from './SectionBackgrounds';
 
 const stats = [
@@ -54,18 +54,9 @@ const ProgressRing = ({ progress, isInView }: { progress: number; isInView: bool
 
   return (
     <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 80 80">
-      <circle
-        cx="40"
-        cy="40"
-        r={radius}
-        fill="none"
-        stroke="rgba(255,255,255,0.1)"
-        strokeWidth="3"
-      />
+      <circle cx="40" cy="40" r={radius} fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="3" />
       <motion.circle
-        cx="40"
-        cy="40"
-        r={radius}
+        cx="40" cy="40" r={radius}
         fill="none"
         stroke="rgba(234,179,8,0.6)"
         strokeWidth="3"
@@ -80,16 +71,23 @@ const ProgressRing = ({ progress, isInView }: { progress: number; isInView: bool
 };
 
 const StatisticsSection = () => {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  const bgX = useTransform(scrollYProgress, [0, 1], [-30, 30]);
+
   return (
-    <section ref={sectionRef} className="py-24 relative overflow-hidden bg-primary">
-      {/* Background Decor */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
+    <section ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden bg-primary">
+      {/* Background Decor with parallax */}
+      <motion.div className="absolute inset-0 opacity-10 pointer-events-none" style={{ x: bgX }}>
         <div className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-white blur-3xl"></div>
         <div className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-white blur-3xl"></div>
-      </div>
+      </motion.div>
       <StatisticsBackground />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
@@ -97,23 +95,31 @@ const StatisticsSection = () => {
           {stats.map((stat, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={{ opacity: 0, y: 50, filter: "blur(8px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ duration: 0.6, delay: index * 0.15 }}
               viewport={{ once: true, margin: "-100px" }}
               className="text-center group cursor-pointer"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.08, y: -8 }}
             >
               <div className="relative w-20 h-20 mx-auto mb-6">
                 <ProgressRing progress={stat.progress} isInView={isInView} />
-                <div className="absolute inset-0 bg-white/10 rounded-2xl flex items-center justify-center text-secondary group-hover:bg-white/20 group-hover:scale-110 transition-all duration-300 shadow-xl backdrop-blur-sm">
+                <div className="absolute inset-0 bg-white/10 rounded-2xl flex items-center justify-center text-secondary group-hover:bg-white/20 transition-all duration-300 shadow-xl backdrop-blur-sm">
                   {stat.icon}
                 </div>
               </div>
               <div className="mb-3">
                 <Counter value={stat.value} suffix={stat.suffix} />
               </div>
-              <p className="text-blue-100 font-medium text-lg tracking-wide">{stat.label}</p>
+              <motion.p
+                className="text-blue-100 font-medium text-lg tracking-wide"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: index * 0.15 + 0.3 }}
+                viewport={{ once: true }}
+              >
+                {stat.label}
+              </motion.p>
             </motion.div>
           ))}
         </div>
