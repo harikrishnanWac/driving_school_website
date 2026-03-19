@@ -1,8 +1,11 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { BookOpen, ShieldCheck, Car, Users, Route, MapPin, Award, Timer, Gauge } from 'lucide-react';
+import { useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { motion, useScroll, useTransform, useMotionValueEvent, type MotionValue } from 'framer-motion';
+import { BookOpen, ShieldCheck, Car, Users, Route, MapPin, Award, Timer, Gauge, type LucideIcon } from 'lucide-react';
+
+const ScrollObject3D = dynamic(() => import('./ScrollObject3D'), { ssr: false });
 
 const sections = [
   {
@@ -46,6 +49,50 @@ const sections = [
   },
 ];
 
+const FeatureCard = ({
+  icon: Icon,
+  title,
+  desc,
+  accentColor,
+  scrollYProgress,
+  enterAt,
+  exitAt,
+}: {
+  icon: LucideIcon;
+  title: string;
+  desc: string;
+  accentColor: string;
+  scrollYProgress: MotionValue<number>;
+  enterAt: [number, number];
+  exitAt: [number, number];
+}) => {
+  const cardOpacity = useTransform(
+    scrollYProgress,
+    [enterAt[0], enterAt[1], exitAt[0], exitAt[1]],
+    [0, 1, 1, 0]
+  );
+  const cardY = useTransform(
+    scrollYProgress,
+    [enterAt[0], enterAt[1]],
+    [25, 0]
+  );
+
+  return (
+    <motion.div
+      className="flex items-start gap-4 p-4 rounded-2xl bg-gray-50/80 backdrop-blur-sm border border-gray-100"
+      style={{ opacity: cardOpacity, y: cardY }}
+    >
+      <div className={`w-11 h-11 ${accentColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
+        <Icon size={20} className="text-white" />
+      </div>
+      <div>
+        <h4 className="text-gray-900 font-bold text-sm">{title}</h4>
+        <p className="text-gray-500 text-sm">{desc}</p>
+      </div>
+    </motion.div>
+  );
+};
+
 const SectionBlock = ({
   section,
   index,
@@ -55,7 +102,7 @@ const SectionBlock = ({
   section: typeof sections[0];
   index: number;
   totalSections: number;
-  scrollYProgress: ReturnType<typeof useScroll>['scrollYProgress'];
+  scrollYProgress: MotionValue<number>;
 }) => {
   const segSize = 1 / totalSections;
   const start = index * segSize;
@@ -64,42 +111,46 @@ const SectionBlock = ({
   const holdEnd = start + segSize * 0.75;
   const exitEnd = start + segSize;
 
-  // Large word animation
+  // Phase 1: Word appears (0% - 20%)
+  // Phase 2: Details fade in (20% - 45%)
+  // Phase 3: Hold (45% - 70%)
+  // Phase 4: Everything exits (70% - 100%)
+
   const wordOpacity = useTransform(
     scrollYProgress,
-    [start, enterEnd, holdStart, holdEnd, exitEnd],
-    [0, 1, 1, 1, 0]
+    [start, start + segSize * 0.12, start + segSize * 0.2, holdEnd, exitEnd - segSize * 0.1, exitEnd],
+    [0, 1, 1, 1, 1, 0]
   );
   const wordScale = useTransform(
     scrollYProgress,
-    [start, enterEnd, holdEnd, exitEnd],
-    [0.6, 1, 1, 1.08]
+    [start, start + segSize * 0.15, start + segSize * 0.2, holdEnd, exitEnd],
+    [0.6, 1, 1, 1, 1.06]
   );
   const wordY = useTransform(
     scrollYProgress,
-    [start, enterEnd, holdEnd, exitEnd],
-    [40, 0, 0, -50]
+    [start, start + segSize * 0.15, holdEnd, exitEnd],
+    [40, 0, 0, -40]
   );
-  const wordBlur = useTransform(
+  const wordBlurFilter = useTransform(
     scrollYProgress,
-    [start, enterEnd, holdEnd, exitEnd],
-    [12, 0, 0, 12]
+    [start, start + segSize * 0.15, holdEnd, exitEnd],
+    ['blur(12px)', 'blur(0px)', 'blur(0px)', 'blur(12px)']
   );
 
-  // Content panel animation (slightly delayed)
+  // Details come in AFTER the word is visible
   const contentOpacity = useTransform(
     scrollYProgress,
-    [start + segSize * 0.1, start + segSize * 0.3, holdEnd - segSize * 0.05, exitEnd - segSize * 0.1],
+    [start + segSize * 0.22, start + segSize * 0.38, holdEnd - segSize * 0.05, exitEnd - segSize * 0.12],
     [0, 1, 1, 0]
   );
   const contentX = useTransform(
     scrollYProgress,
-    [start + segSize * 0.1, start + segSize * 0.3, holdEnd, exitEnd],
-    [60, 0, 0, -30]
+    [start + segSize * 0.22, start + segSize * 0.38, holdEnd, exitEnd - segSize * 0.1],
+    [50, 0, 0, -30]
   );
 
-  // Feature cards stagger
-  const featureDelays = [0.15, 0.22, 0.29];
+  // Feature cards come in even later, one by one
+  const featureDelays = [0.32, 0.38, 0.44];
 
   return (
     <motion.div
@@ -110,7 +161,6 @@ const SectionBlock = ({
 
         {/* Left: Large word + label */}
         <div className="lg:w-1/2 flex flex-col items-center lg:items-start">
-          {/* Section counter */}
           <motion.div
             className="flex items-center gap-3 mb-4"
             style={{ opacity: contentOpacity }}
@@ -121,19 +171,17 @@ const SectionBlock = ({
             </span>
           </motion.div>
 
-          {/* Big word */}
           <motion.h2
             className={`text-[22vw] md:text-[16vw] lg:text-[14vw] font-black bg-gradient-to-br ${section.color} bg-clip-text text-transparent select-none leading-[0.85] tracking-tight`}
             style={{
               scale: wordScale,
               y: wordY,
-              filter: useTransform(wordBlur, (v) => `blur(${v}px)`),
+              filter: wordBlurFilter,
             }}
           >
             {section.word}
           </motion.h2>
 
-          {/* Tagline under word */}
           <motion.p
             className="text-gray-400 text-sm md:text-base tracking-[0.2em] uppercase font-medium mt-3"
             style={{ opacity: contentOpacity }}
@@ -147,47 +195,26 @@ const SectionBlock = ({
           className="lg:w-1/2 max-w-lg"
           style={{ opacity: contentOpacity, x: contentX }}
         >
-          {/* Description */}
           <p className="text-gray-500 text-base md:text-lg leading-relaxed mb-8">
             {section.description}
           </p>
 
-          {/* Feature cards */}
           <div className="space-y-4">
-            {section.features.map((feature, idx) => {
-              const Icon = feature.icon;
-              const cardOpacity = useTransform(
-                scrollYProgress,
-                [
+            {section.features.map((feature, idx) => (
+              <FeatureCard
+                key={idx}
+                icon={feature.icon}
+                title={feature.title}
+                desc={feature.desc}
+                accentColor={section.accentColor}
+                scrollYProgress={scrollYProgress}
+                enterAt={[
                   start + segSize * featureDelays[idx],
                   start + segSize * (featureDelays[idx] + 0.1),
-                  holdEnd,
-                  exitEnd - segSize * 0.1,
-                ],
-                [0, 1, 1, 0]
-              );
-              const cardY = useTransform(
-                scrollYProgress,
-                [start + segSize * featureDelays[idx], start + segSize * (featureDelays[idx] + 0.1)],
-                [25, 0]
-              );
-
-              return (
-                <motion.div
-                  key={idx}
-                  className="flex items-start gap-4 p-4 rounded-2xl bg-gray-50/80 backdrop-blur-sm border border-gray-100"
-                  style={{ opacity: cardOpacity, y: cardY }}
-                >
-                  <div className={`w-11 h-11 ${section.accentColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                    <Icon size={20} className="text-white" />
-                  </div>
-                  <div>
-                    <h4 className="text-gray-900 font-bold text-sm">{feature.title}</h4>
-                    <p className="text-gray-500 text-sm">{feature.desc}</p>
-                  </div>
-                </motion.div>
-              );
-            })}
+                ]}
+                exitAt={[holdEnd, exitEnd - segSize * 0.1]}
+              />
+            ))}
           </div>
         </motion.div>
 
@@ -198,13 +225,19 @@ const SectionBlock = ({
 
 const ScrollRevealWords = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [progress, setProgress] = useState(0);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
   });
 
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    setProgress(v);
+  });
+
   const lineWidth = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  const scrollIndicatorOpacity = useTransform(scrollYProgress, [0, 0.08], [1, 0]);
 
   return (
     <div ref={containerRef} className="relative h-[500vh]">
@@ -232,6 +265,11 @@ const ScrollRevealWords = () => {
           <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent" />
         </div>
 
+        {/* 3D Object — background right side */}
+        <div className="absolute right-0 top-0 w-[55%] h-full z-[4] opacity-[0.18] hidden lg:block pointer-events-none">
+          <ScrollObject3D scrollProgress={progress} />
+        </div>
+
         {/* Section blocks */}
         {sections.map((section, index) => (
           <SectionBlock
@@ -256,7 +294,7 @@ const ScrollRevealWords = () => {
         {/* Scroll indicator — only at start */}
         <motion.div
           className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20"
-          style={{ opacity: useTransform(scrollYProgress, [0, 0.08], [1, 0]) }}
+          style={{ opacity: scrollIndicatorOpacity }}
         >
           <motion.div
             className="flex flex-col items-center gap-2"
