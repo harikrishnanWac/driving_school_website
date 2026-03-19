@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Award, Clock, ShieldCheck, Car } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { AboutBackground } from './SectionBackgrounds';
 
 const features = [
@@ -33,48 +34,80 @@ const AboutSection = () => {
       <AboutBackground />
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
-          
-          <div className="lg:w-1/2 relative w-full">
+
+          <motion.div
+            className="lg:w-1/2 relative w-full"
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            viewport={{ once: true, margin: "-100px" }}
+          >
             <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
-              <img 
-                src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1000" 
-                alt="Student learning to drive" 
+              <img
+                src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1000"
+                alt="Student learning to drive"
                 className="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-700"
               />
             </div>
             {/* Experience Badge */}
-            <div className="absolute -bottom-6 -right-2 md:bottom-10 md:-right-10 bg-primary text-white p-8 rounded-3xl shadow-xl z-20">
+            <motion.div
+              className="absolute -bottom-6 -right-2 md:bottom-10 md:-right-10 bg-primary text-white p-8 rounded-3xl shadow-xl z-20"
+              initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
+              whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+              transition={{ duration: 0.5, delay: 0.4, type: "spring", stiffness: 200 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.1, rotate: 3 }}
+            >
               <div className="text-4xl font-bold mb-1">12+</div>
               <div className="text-sm font-medium text-blue-100">Years of<br/>Experience</div>
-            </div>
+            </motion.div>
             {/* Background Pattern */}
             <div className="absolute top-10 -left-6 md:-left-10 w-full h-full border-4 border-secondary rounded-3xl z-0"></div>
-          </div>
+          </motion.div>
 
           <div className="lg:w-1/2 mt-12 lg:mt-0">
-            <div className="mb-2 text-primary font-bold tracking-wider uppercase text-sm">About Our School</div>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              We empower learners to master the road with confidence.
-            </h2>
-            <p className="text-gray-600 mb-10 text-lg leading-relaxed">
-              At SafeDrive, we believe that driving is a life skill. Our comprehensive curriculum goes beyond basic operation, focusing on road awareness, defensive driving, and building the lifelong habits necessary for true safety on the modern road.
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              <div className="mb-2 text-primary font-bold tracking-wider uppercase text-sm">About Our School</div>
+              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                We empower learners to master the road with confidence.
+              </h2>
+              <p className="text-gray-600 mb-10 text-lg leading-relaxed">
+                At SafeDrive, we believe that driving is a life skill. Our comprehensive curriculum goes beyond basic operation, focusing on road awareness, defensive driving, and building the lifelong habits necessary for true safety on the modern road.
+              </p>
+            </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {features.map((feature, index) => (
-                <div key={index} className="flex gap-4 group">
-                  <div className="flex-shrink-0 w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                <motion.div
+                  key={index}
+                  className="flex gap-4 group cursor-pointer"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  whileHover={{ x: 5 }}
+                >
+                  <motion.div
+                    className="flex-shrink-0 w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300"
+                    whileHover={{ rotate: [0, -10, 10, -5, 0] }}
+                    transition={{ duration: 0.5 }}
+                  >
                     {React.cloneElement(feature.icon as React.ReactElement<{ className?: string }>, { className: 'group-hover:text-white transition-colors duration-300' })}
-                  </div>
+                  </motion.div>
                   <div>
                     <h4 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">{feature.title}</h4>
                     <p className="text-gray-600 leading-relaxed text-sm">{feature.description}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-          
+
         </div>
       </div>
     </section>
