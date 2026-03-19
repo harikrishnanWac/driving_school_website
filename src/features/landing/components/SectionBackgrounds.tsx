@@ -27,6 +27,10 @@ const sharedStyles = `
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+@keyframes drive-road {
+  0% { offset-distance: 0%; }
+  100% { offset-distance: 100%; }
+}
 `;
 
 function InjectStyles() {
@@ -41,40 +45,19 @@ export function AboutBackground() {
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <InjectStyles />
       <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-        <path
-          d="M-50,100 Q200,50 400,200 T800,150 T1200,250 T1600,100"
-          fill="none"
-          stroke="currentColor"
-          className="text-primary/[0.06]"
-          strokeWidth="80"
-          strokeLinecap="round"
-        />
-        <path
-          d="M-50,100 Q200,50 400,200 T800,150 T1200,250 T1600,100"
-          fill="none"
-          stroke="currentColor"
-          className="text-primary/[0.08]"
-          strokeWidth="3"
-          strokeDasharray="20 15"
-          style={{ animation: 'dash-move 8s linear infinite' }}
-        />
-        <path
-          d="M-50,400 Q300,350 500,500 T900,400 T1400,550 T1800,350"
-          fill="none"
-          stroke="currentColor"
-          className="text-secondary/[0.05]"
-          strokeWidth="60"
-          strokeLinecap="round"
-        />
-        <path
-          d="M-50,400 Q300,350 500,500 T900,400 T1400,550 T1800,350"
-          fill="none"
-          stroke="currentColor"
-          className="text-secondary/[0.07]"
-          strokeWidth="2"
-          strokeDasharray="16 12"
-          style={{ animation: 'dash-move 10s linear infinite' }}
-        />
+        <defs>
+          <path id="aboutRoad1" d="M-50,100 Q200,50 400,200 T800,150 T1200,250 T1600,100" />
+          <path id="aboutRoad2" d="M-50,400 Q300,350 500,500 T900,400 T1400,550 T1800,350" />
+        </defs>
+        {/* Road 1 - surface */}
+        <use href="#aboutRoad1" fill="none" stroke="currentColor" className="text-primary/[0.06]" strokeWidth="80" strokeLinecap="round" />
+        {/* Road 1 - center dashes */}
+        <use href="#aboutRoad1" fill="none" stroke="currentColor" className="text-primary/[0.08]" strokeWidth="3" strokeDasharray="20 15" style={{ animation: 'dash-move 8s linear infinite' }} />
+
+        {/* Road 2 - surface */}
+        <use href="#aboutRoad2" fill="none" stroke="currentColor" className="text-secondary/[0.05]" strokeWidth="60" strokeLinecap="round" />
+        {/* Road 2 - center dashes */}
+        <use href="#aboutRoad2" fill="none" stroke="currentColor" className="text-secondary/[0.07]" strokeWidth="2" strokeDasharray="16 12" style={{ animation: 'dash-move 10s linear infinite' }} />
       </svg>
       {/* Subtle steering wheel silhouettes */}
       <svg className="absolute top-12 right-12 w-32 h-32 text-primary/[0.04]" style={{ animation: 'spin-slow 30s linear infinite' }} viewBox="0 0 100 100">
