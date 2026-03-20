@@ -7,10 +7,10 @@ import { GalleryBackground } from './SectionBackgrounds';
 import TextReveal from './TextReveal';
 
 const images = [
-  { src: "https://images.unsplash.com/photo-1606778465053-5290a2fc7225?auto=format&fit=crop&q=80&w=800", alt: "Students learning driving", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-2" },
-  { src: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=800", alt: "Training vehicles", colSpan: "col-span-1", rowSpan: "row-span-1" },
-  { src: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=800", alt: "Driving practice", colSpan: "col-span-1", rowSpan: "row-span-1" },
-  { src: "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80&w=800", alt: "Modern cars", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-1" }
+  { src: "https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&q=80&w=1200", alt: "Student behind the wheel during a lesson", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-2" },
+  { src: "https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&q=80&w=1200", alt: "Modern training vehicle fleet", colSpan: "col-span-1", rowSpan: "row-span-1" },
+  { src: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=1200", alt: "Confident driver on the open road", colSpan: "col-span-1", rowSpan: "row-span-1" },
+  { src: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=1200", alt: "Sleek modern car on the road", colSpan: "col-span-1 md:col-span-2", rowSpan: "row-span-1" }
 ];
 
 const Lightbox = ({

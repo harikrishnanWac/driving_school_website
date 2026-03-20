@@ -11,21 +11,21 @@ const testimonials = [
   {
     name: "Sarah Jenkins",
     role: "Passed on 1st Attempt",
-    image: "https://i.pravatar.cc/150?img=47",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150&h=150",
     review: "The instructors are amazingly patient and detail-oriented. The dual-control cars made me feel safe from day one. I passed my driving test on the very first try!",
     rating: 5
   },
   {
     name: "Michael Chen",
     role: "Standard Plan Graduate",
-    image: "https://i.pravatar.cc/150?img=11",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150&h=150",
     review: "I was extremely nervous about interstate driving. SafeDrive's progressive teaching method helped me build confidence step-by-step. Highly recommended.",
     rating: 5
   },
   {
     name: "Amanda Rivera",
     role: "Premium Plan Graduate",
-    image: "https://i.pravatar.cc/150?img=5",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150",
     review: "Worth every penny! The license guidance and mock exams mirrored the actual DMV test perfectly. They handled all the stress so I could just focus on driving.",
     rating: 5
   }

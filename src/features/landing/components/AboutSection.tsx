@@ -124,8 +124,8 @@ const AboutSection = () => {
                   style={{ scale: imageScale }}
                 >
                   <img
-                    src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1000"
-                    alt="Student learning to drive"
+                    src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&q=80&w=1200"
+                    alt="Professional driving instructor teaching a student in a modern car"
                     className="w-full h-[500px] object-cover"
                   />
                 </motion.div>
