@@ -17,3 +17,4 @@ const Card: React.FC<CardProps> = ({ children, className = '', hoverEffect = fal
 };
 
 export default Card;
+

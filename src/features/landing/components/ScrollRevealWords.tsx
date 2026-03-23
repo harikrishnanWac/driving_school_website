@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, useScroll, useTransform, useMotionValueEvent, type MotionValue } from 'framer-motion';
 import { BookOpen, ShieldCheck, Car, Users, Route, MapPin, Award, Timer, Gauge, type LucideIcon } from 'lucide-react';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 
 const ScrollObject3D = dynamic(() => import('./ScrollObject3D'), { ssr: false });
 
@@ -267,7 +268,9 @@ const ScrollRevealWords = () => {
 
         {/* 3D Object — background right side */}
         <div className="absolute right-0 top-0 w-[55%] h-full z-[4] opacity-[0.18] hidden lg:block pointer-events-none">
-          <ScrollObject3D scrollProgress={progress} />
+          <ErrorBoundary>
+            <ScrollObject3D scrollProgress={progress} />
+          </ErrorBoundary>
         </div>
 
         {/* Section blocks */}

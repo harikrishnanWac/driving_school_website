@@ -1,19 +1,29 @@
 'use client';
 
-import React, { useRef, useMemo } from 'react';
+import React, { useRef, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
 
 const GLB_BASE = '/kenney_car-kit/Models/GLB format';
 
-// Preload all models we'll use
-useGLTF.preload(`${GLB_BASE}/sedan.glb`);
-useGLTF.preload(`${GLB_BASE}/hatchback-sports.glb`);
-useGLTF.preload(`${GLB_BASE}/suv.glb`);
-useGLTF.preload(`${GLB_BASE}/taxi.glb`);
-useGLTF.preload(`${GLB_BASE}/van.glb`);
-useGLTF.preload(`${GLB_BASE}/cone.glb`);
+// Defer model preloading until after the page is idle
+if (typeof window !== 'undefined') {
+  const preloadModels = () => {
+    useGLTF.preload(`${GLB_BASE}/sedan.glb`);
+    useGLTF.preload(`${GLB_BASE}/hatchback-sports.glb`);
+    useGLTF.preload(`${GLB_BASE}/suv.glb`);
+    useGLTF.preload(`${GLB_BASE}/taxi.glb`);
+    useGLTF.preload(`${GLB_BASE}/van.glb`);
+    useGLTF.preload(`${GLB_BASE}/cone.glb`);
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(preloadModels);
+  } else {
+    setTimeout(preloadModels, 200);
+  }
+}
 
 // ============================================================
 // Shared materials for environment

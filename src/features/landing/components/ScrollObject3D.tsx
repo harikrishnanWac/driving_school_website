@@ -7,7 +7,14 @@ import * as THREE from 'three';
 
 const GLB_BASE = '/kenney_car-kit/Models/GLB format';
 
-useGLTF.preload(`${GLB_BASE}/sedan.glb`);
+if (typeof window !== 'undefined') {
+  const preload = () => useGLTF.preload(`${GLB_BASE}/sedan.glb`);
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(preload);
+  } else {
+    setTimeout(preload, 200);
+  }
+}
 
 function CarModel({ scrollProgress }: { scrollProgress: number }) {
   const { scene } = useGLTF(`${GLB_BASE}/sedan.glb`);

@@ -31,6 +31,14 @@ const sharedStyles = `
   0% { offset-distance: 0%; }
   100% { offset-distance: 100%; }
 }
+@keyframes drive-left {
+  0% { transform: translateX(calc(100vw + 80px)); }
+  100% { transform: translateX(-80px); }
+}
+@keyframes drive-right {
+  0% { transform: translateX(-80px) scaleX(-1); }
+  100% { transform: translateX(calc(100vw + 80px)) scaleX(-1); }
+}
 `;
 
 function InjectStyles() {
@@ -154,41 +162,117 @@ export function StatisticsBackground() {
 // Gallery Section - Tire track patterns
 // ============================================================
 export function GalleryBackground() {
+  const lanes = [
+    { y: '18%', direction: 'left' as const },
+    { y: '38%', direction: 'right' as const },
+    { y: '62%', direction: 'left' as const },
+    { y: '82%', direction: 'right' as const },
+  ];
+
+  const vehicles = [
+    // Lane 1 — left
+    { lane: 0, type: 'sedan' as const, duration: 18, delay: 0 },
+    { lane: 0, type: 'hatchback' as const, duration: 22, delay: 8 },
+    // Lane 2 — right
+    { lane: 1, type: 'suv' as const, duration: 20, delay: 2 },
+    { lane: 1, type: 'truck' as const, duration: 26, delay: 14 },
+    // Lane 3 — left
+    { lane: 2, type: 'sedan' as const, duration: 16, delay: 5 },
+    { lane: 2, type: 'suv' as const, duration: 24, delay: 13 },
+    // Lane 4 — right
+    { lane: 3, type: 'hatchback' as const, duration: 21, delay: 3 },
+    { lane: 3, type: 'truck' as const, duration: 28, delay: 16 },
+  ];
+
+  const carSvg = (type: 'sedan' | 'hatchback' | 'suv' | 'truck') => {
+    switch (type) {
+      case 'sedan':
+        return (
+          <svg width="60" height="22" viewBox="0 0 60 22" fill="currentColor">
+            <rect x="4" y="9" width="52" height="11" rx="3" />
+            <rect x="14" y="2" width="26" height="11" rx="4" />
+            <circle cx="16" cy="20" r="3.5" opacity="0.5" />
+            <circle cx="46" cy="20" r="3.5" opacity="0.5" />
+            <rect x="54" y="11" width="4" height="3" rx="1" opacity="0.6" />
+          </svg>
+        );
+      case 'hatchback':
+        return (
+          <svg width="50" height="22" viewBox="0 0 50 22" fill="currentColor">
+            <rect x="3" y="9" width="44" height="11" rx="3" />
+            <path d="M12,9 L16,2 L34,2 L38,9" />
+            <circle cx="14" cy="20" r="3.5" opacity="0.5" />
+            <circle cx="38" cy="20" r="3.5" opacity="0.5" />
+            <rect x="45" y="11" width="3" height="3" rx="1" opacity="0.6" />
+          </svg>
+        );
+      case 'suv':
+        return (
+          <svg width="66" height="26" viewBox="0 0 66 26" fill="currentColor">
+            <rect x="4" y="10" width="58" height="14" rx="3" />
+            <rect x="10" y="2" width="36" height="12" rx="3" />
+            <circle cx="18" cy="24" r="4" opacity="0.5" />
+            <circle cx="52" cy="24" r="4" opacity="0.5" />
+            <rect x="60" y="13" width="4" height="3" rx="1" opacity="0.6" />
+          </svg>
+        );
+      case 'truck':
+        return (
+          <svg width="74" height="26" viewBox="0 0 74 26" fill="currentColor">
+            <rect x="4" y="8" width="66" height="16" rx="3" />
+            <rect x="50" y="2" width="18" height="10" rx="3" />
+            <circle cx="18" cy="24" r="4" opacity="0.5" />
+            <circle cx="38" cy="24" r="4" opacity="0.5" />
+            <circle cx="58" cy="24" r="4" opacity="0.5" />
+            <rect x="68" y="12" width="4" height="3" rx="1" opacity="0.6" />
+          </svg>
+        );
+    }
+  };
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       <InjectStyles />
-      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
-        {/* Tire tracks - subtle parallel zigzag lines */}
-        <path
-          d="M-20,0 Q60,80 20,160 T60,320 T20,480 T60,640 T20,800"
-          fill="none"
-          stroke="currentColor"
-          className="text-gray-300/40"
-          strokeWidth="12"
-          strokeLinecap="round"
-          opacity="0.06"
-        />
-        <path
-          d="M10,0 Q90,80 50,160 T90,320 T50,480 T90,640 T50,800"
-          fill="none"
-          stroke="currentColor"
-          className="text-gray-300/40"
-          strokeWidth="12"
-          strokeLinecap="round"
-          opacity="0.06"
-        />
-        {/* Tread pattern on tracks */}
-        <path
-          d="M-20,0 Q60,80 20,160 T60,320 T20,480 T60,640 T20,800"
-          fill="none"
-          stroke="currentColor"
-          className="text-gray-400"
-          strokeWidth="1"
-          strokeDasharray="4 8"
-          opacity="0.08"
-          style={{ animation: 'dash-move 12s linear infinite' }}
-        />
+
+      {/* 4-lane track */}
+      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1400 800">
+        {/* Road surface */}
+        <rect x="0" y="100" width="1400" height="600" fill="currentColor" className="text-gray-200" opacity="0.25" />
+
+        {/* Outer edges — solid white */}
+        <line x1="0" y1="100" x2="1400" y2="100" stroke="currentColor" className="text-gray-400" strokeWidth="3" opacity="0.12" />
+        <line x1="0" y1="700" x2="1400" y2="700" stroke="currentColor" className="text-gray-400" strokeWidth="3" opacity="0.12" />
+
+        {/* Center divider — double yellow */}
+        <line x1="0" y1="398" x2="1400" y2="398" stroke="currentColor" className="text-yellow-500" strokeWidth="2" opacity="0.1" />
+        <line x1="0" y1="402" x2="1400" y2="402" stroke="currentColor" className="text-yellow-500" strokeWidth="2" opacity="0.1" />
+
+        {/* Lane dividers — dashed white */}
+        <line x1="0" y1="250" x2="1400" y2="250" stroke="currentColor" className="text-gray-400" strokeWidth="1.5" strokeDasharray="30 20" opacity="0.1" style={{ animation: 'dash-move 4s linear infinite' }} />
+        <line x1="0" y1="550" x2="1400" y2="550" stroke="currentColor" className="text-gray-400" strokeWidth="1.5" strokeDasharray="30 20" opacity="0.1" style={{ animation: 'dash-move 4s linear infinite reverse' }} />
       </svg>
+
+      {/* Animated vehicles */}
+      {vehicles.map((v, i) => {
+        const lane = lanes[v.lane];
+        const anim = lane.direction === 'left' ? 'drive-left' : 'drive-right';
+        return (
+          <div
+            key={i}
+            className="absolute text-gray-400"
+            style={{
+              top: lane.y,
+              left: 0,
+              opacity: 0.08,
+              animation: `${anim} ${v.duration}s linear infinite`,
+              animationDelay: `${v.delay}s`,
+            }}
+          >
+            {carSvg(v.type)}
+          </div>
+        );
+      })}
+
       {/* Floating camera shutter shapes for gallery theme */}
       <svg className="absolute bottom-10 right-10 w-24 h-24 text-gray-300" style={{ animation: 'pulse-slow 6s ease-in-out infinite' }} viewBox="0 0 100 100">
         <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="3" opacity="0.06" />

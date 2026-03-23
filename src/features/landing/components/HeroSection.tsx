@@ -2,6 +2,7 @@
 
 import React, { Suspense } from 'react';
 import Button from '@/components/ui/Button';
+import ErrorBoundary from '@/components/ui/ErrorBoundary';
 import { ChevronRight, PlayCircle } from 'lucide-react';
 import * as motion from 'framer-motion/client';
 import dynamic from 'next/dynamic';
@@ -16,9 +17,11 @@ const HeroSection = () => {
     >
       {/* 3D scene in a rounded box */}
       <div className="absolute inset-4 md:inset-8 z-0 rounded-3xl overflow-hidden">
-        <Suspense fallback={<div className="absolute inset-0 bg-gray-900" />}>
-          <DrivingScene />
-        </Suspense>
+        <ErrorBoundary fallback={<div className="absolute inset-0 bg-gray-900" />}>
+          <Suspense fallback={<div className="absolute inset-0 bg-gray-900" />}>
+            <DrivingScene />
+          </Suspense>
+        </ErrorBoundary>
       </div>
 
       {/* Gradient overlay */}
