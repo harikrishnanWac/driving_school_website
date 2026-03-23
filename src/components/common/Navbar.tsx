@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Menu, X, Car } from 'lucide-react';
 import Button from '../ui/Button';
 
@@ -22,6 +23,7 @@ const Navbar = () => {
     { name: 'Packages', href: '#packages' },
     { name: 'Gallery', href: '#gallery' },
     { name: 'Testimonials', href: '#testimonials' },
+    { name: 'Blog', href: '/blog' },
   ];
 
   return (
@@ -40,15 +42,25 @@ const Navbar = () => {
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             <div className="flex items-center gap-6">
-              {navLinks.map((link) => (
-                <a 
-                  key={link.name} 
-                  href={link.href}
-                  className={`text-sm font-medium hover:text-primary transition-colors ${isScrolled ? 'text-gray-600' : 'text-white/90 hover:text-white'}`}
-                >
-                  {link.name}
-                </a>
-              ))}
+              {navLinks.map((link) =>
+                link.href.startsWith('/') ? (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className={`text-sm font-medium hover:text-primary transition-colors ${isScrolled ? 'text-gray-600' : 'text-white/90 hover:text-white'}`}
+                  >
+                    {link.name}
+                  </Link>
+                ) : (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className={`text-sm font-medium hover:text-primary transition-colors ${isScrolled ? 'text-gray-600' : 'text-white/90 hover:text-white'}`}
+                  >
+                    {link.name}
+                  </a>
+                )
+              )}
             </div>
             <a href="#contact">
               <Button variant={isScrolled ? 'primary' : 'secondary'} size="sm" className="hidden lg:inline-flex shadow-sm">
@@ -70,16 +82,27 @@ const Navbar = () => {
       {/* Mobile Nav */}
       {mobileMenuOpen && (
         <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-100 py-4 px-4 flex flex-col gap-4">
-          {navLinks.map((link) => (
-            <a 
-              key={link.name} 
-              href={link.href}
-              className="text-base font-medium text-gray-700 py-2 hover:text-primary"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              {link.name}
-            </a>
-          ))}
+          {navLinks.map((link) =>
+            link.href.startsWith('/') ? (
+              <Link
+                key={link.name}
+                href={link.href}
+                className="text-base font-medium text-gray-700 py-2 hover:text-primary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.name}
+              </Link>
+            ) : (
+              <a
+                key={link.name}
+                href={link.href}
+                className="text-base font-medium text-gray-700 py-2 hover:text-primary"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {link.name}
+              </a>
+            )
+          )}
           <a href="#contact" onClick={() => setMobileMenuOpen(false)}>
             <Button variant="primary" fullWidth>
               Enroll Now

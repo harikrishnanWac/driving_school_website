@@ -329,6 +329,159 @@ export function TestimonialsBackground() {
 }
 
 // ============================================================
+// Instructors Section - ID badge & person silhouettes
+// ============================================================
+export function InstructorsBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <InjectStyles />
+      {/* Grid pattern */}
+      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+        <defs>
+          <pattern id="instructorGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5" className="text-gray-300" opacity="0.3" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#instructorGrid)" />
+      </svg>
+      {/* Floating ID badge shapes */}
+      {[
+        { top: '12%', left: '6%', delay: 0 },
+        { top: '65%', right: '8%', delay: 3 },
+        { top: '80%', left: '40%', delay: 5 },
+      ].map((pos, i) => (
+        <svg key={i} className="absolute text-primary/[0.04]" style={{ top: pos.top, left: pos.left, right: pos.right, width: 48, height: 36, animation: `drift-right ${7 + i * 2}s ease-in-out infinite`, animationDelay: `${pos.delay}s` }} viewBox="0 0 48 36">
+          <rect x="2" y="2" width="44" height="32" rx="4" fill="none" stroke="currentColor" strokeWidth="2.5" />
+          <circle cx="16" cy="16" r="6" fill="currentColor" opacity="0.3" />
+          <line x1="26" y1="12" x2="42" y2="12" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
+          <line x1="26" y1="18" x2="38" y2="18" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
+          <line x1="8" y1="28" x2="40" y2="28" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+        </svg>
+      ))}
+      {/* Subtle graduation cap */}
+      <svg className="absolute top-16 right-16 w-24 h-24 text-secondary/[0.04]" style={{ animation: 'drift-right 10s ease-in-out infinite' }} viewBox="0 0 100 100">
+        <polygon points="50,20 90,40 50,60 10,40" fill="none" stroke="currentColor" strokeWidth="3" />
+        <line x1="50" y1="60" x2="50" y2="80" stroke="currentColor" strokeWidth="2" />
+        <line x1="80" y1="45" x2="80" y2="70" stroke="currentColor" strokeWidth="2" />
+        <path d="M35,65 Q50,80 65,65" fill="none" stroke="currentColor" strokeWidth="2" />
+      </svg>
+    </div>
+  );
+}
+
+// ============================================================
+// FAQ Section - Question marks & speech bubbles
+// ============================================================
+export function FAQBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <InjectStyles />
+      {/* Floating question marks */}
+      {[
+        { top: '8%', left: '4%', size: 36, delay: 0 },
+        { top: '25%', right: '6%', size: 28, delay: 2 },
+        { top: '60%', left: '8%', size: 32, delay: 4 },
+        { top: '75%', right: '12%', size: 24, delay: 1 },
+        { top: '45%', left: '85%', size: 30, delay: 3 },
+      ].map((pos, i) => (
+        <svg key={i} className="absolute text-primary/[0.05]" style={{ top: pos.top, left: pos.left, right: pos.right, width: pos.size, height: pos.size, animation: `drift-right ${6 + i * 1.5}s ease-in-out infinite`, animationDelay: `${pos.delay}s` }} viewBox="0 0 40 40">
+          <text x="50%" y="50%" dominantBaseline="central" textAnchor="middle" fontSize="32" fill="currentColor" fontWeight="bold">?</text>
+        </svg>
+      ))}
+      {/* Light bulb shape */}
+      <svg className="absolute bottom-20 left-[10%] w-16 h-24 text-secondary/[0.04]" style={{ animation: 'pulse-slow 5s ease-in-out infinite' }} viewBox="0 0 40 60">
+        <circle cx="20" cy="20" r="14" fill="none" stroke="currentColor" strokeWidth="2.5" />
+        <path d="M14,32 L14,28 Q20,24 26,28 L26,32" fill="none" stroke="currentColor" strokeWidth="2" />
+        <line x1="14" y1="36" x2="26" y2="36" stroke="currentColor" strokeWidth="2" />
+        <line x1="16" y1="40" x2="24" y2="40" stroke="currentColor" strokeWidth="2" />
+        <line x1="20" y1="6" x2="20" y2="2" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="32" y1="12" x2="36" y2="10" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="8" y1="12" x2="4" y2="10" stroke="currentColor" strokeWidth="1.5" />
+      </svg>
+    </div>
+  );
+}
+
+// ============================================================
+// Video Section - Film reel & play button shapes
+// ============================================================
+export function VideoBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <InjectStyles />
+      {/* Film strip along top edge */}
+      <svg className="absolute top-0 left-0 w-full h-16 text-gray-300" preserveAspectRatio="none" viewBox="0 0 1400 60">
+        <rect x="0" y="0" width="1400" height="60" fill="currentColor" opacity="0.03" />
+        {Array.from({ length: 28 }).map((_, i) => (
+          <rect key={i} x={i * 50 + 5} y="5" width="12" height="10" rx="2" fill="currentColor" opacity="0.04" />
+        ))}
+        {Array.from({ length: 28 }).map((_, i) => (
+          <rect key={`b${i}`} x={i * 50 + 5} y="45" width="12" height="10" rx="2" fill="currentColor" opacity="0.04" />
+        ))}
+      </svg>
+      {/* Play button circles */}
+      {[
+        { top: '20%', right: '5%', size: 48, delay: 0 },
+        { top: '70%', left: '4%', size: 36, delay: 2 },
+        { top: '85%', right: '30%', size: 28, delay: 4 },
+      ].map((pos, i) => (
+        <svg key={i} className="absolute text-primary/[0.04]" style={{ top: pos.top, left: pos.left, right: pos.right, width: pos.size, height: pos.size, animation: `pulse-slow ${5 + i * 2}s ease-in-out infinite`, animationDelay: `${pos.delay}s` }} viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="22" fill="none" stroke="currentColor" strokeWidth="2.5" />
+          <polygon points="20,15 38,25 20,35" fill="currentColor" opacity="0.4" />
+        </svg>
+      ))}
+      {/* Film reel */}
+      <svg className="absolute bottom-16 left-[8%] w-20 h-20 text-secondary/[0.04]" style={{ animation: 'spin-slow 25s linear infinite' }} viewBox="0 0 80 80">
+        <circle cx="40" cy="40" r="35" fill="none" stroke="currentColor" strokeWidth="3" />
+        <circle cx="40" cy="40" r="8" fill="none" stroke="currentColor" strokeWidth="2" />
+        <circle cx="40" cy="12" r="5" fill="currentColor" opacity="0.3" />
+        <circle cx="40" cy="68" r="5" fill="currentColor" opacity="0.3" />
+        <circle cx="12" cy="40" r="5" fill="currentColor" opacity="0.3" />
+        <circle cx="68" cy="40" r="5" fill="currentColor" opacity="0.3" />
+      </svg>
+    </div>
+  );
+}
+
+// ============================================================
+// Blog Preview Section - Notebook & pen shapes
+// ============================================================
+export function BlogPreviewBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+      <InjectStyles />
+      {/* Notebook lines pattern */}
+      <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
+        {Array.from({ length: 8 }).map((_, i) => (
+          <line key={i} x1="10%" y1={`${12 + i * 11}%`} x2="90%" y2={`${12 + i * 11}%`} stroke="currentColor" className="text-gray-300" strokeWidth="0.5" opacity="0.2" />
+        ))}
+      </svg>
+      {/* Floating pen/pencil shapes */}
+      {[
+        { top: '15%', right: '6%', delay: 0, rotate: -30 },
+        { top: '70%', left: '5%', delay: 3, rotate: 15 },
+      ].map((pos, i) => (
+        <svg key={i} className="absolute text-primary/[0.04]" style={{ top: pos.top, left: pos.left, right: pos.right, width: 40, height: 40, animation: `drift-right ${8 + i * 2}s ease-in-out infinite`, animationDelay: `${pos.delay}s`, transform: `rotate(${pos.rotate}deg)` }} viewBox="0 0 40 40">
+          <rect x="14" y="4" width="12" height="28" rx="2" fill="none" stroke="currentColor" strokeWidth="2" />
+          <polygon points="14,32 20,38 26,32" fill="currentColor" opacity="0.4" />
+          <line x1="14" y1="10" x2="26" y2="10" stroke="currentColor" strokeWidth="1.5" opacity="0.5" />
+        </svg>
+      ))}
+      {/* Open book shape */}
+      <svg className="absolute bottom-12 right-[10%] w-24 h-20 text-secondary/[0.04]" style={{ animation: 'drift-right 9s ease-in-out infinite', animationDelay: '1s' }} viewBox="0 0 100 80">
+        <path d="M50,15 Q30,5 5,15 L5,70 Q30,60 50,70" fill="none" stroke="currentColor" strokeWidth="2.5" />
+        <path d="M50,15 Q70,5 95,15 L95,70 Q70,60 50,70" fill="none" stroke="currentColor" strokeWidth="2.5" />
+        <line x1="50" y1="15" x2="50" y2="70" stroke="currentColor" strokeWidth="1.5" />
+        <line x1="15" y1="30" x2="42" y2="30" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+        <line x1="15" y1="40" x2="42" y2="40" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+        <line x1="58" y1="30" x2="85" y2="30" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+        <line x1="58" y1="40" x2="85" y2="40" stroke="currentColor" strokeWidth="1" opacity="0.5" />
+      </svg>
+    </div>
+  );
+}
+
+// ============================================================
 // Contact Section - Traffic light & road map pattern
 // ============================================================
 export function ContactBackground() {
